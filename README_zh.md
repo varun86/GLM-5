@@ -6,7 +6,7 @@
 <p align="center">
     👋 加入我们的 <a href="resources/WECHAT.md" target="_blank">微信群</a> 或 <a href="https://discord.gg/QR7SARHRxK" target="_blank">Discord 社区</a>。
     <br>
-    📖 查看 GLM-5 <a href="https://z.ai/blog/glm-5" target="_blank">技术博客</a>。
+    📖 查看 GLM-5 <a href="https://arxiv.org/abs/2602.15763" target="_blank">技术报告</a>。
     <br>
     📍 前往 <a href="https://docs.z.ai/guides/llm/glm-5">Z.ai API 平台</a> 使用 GLM-5 API 服务。
     <br>

@@ -6,7 +6,7 @@
 <p align="center">
     👋 Join our<a href="resources/WECHAT.md" target="_blank"> Wechat</a> or <a href="https://discord.gg/QR7SARHRxK" target="_blank">Discord</a> community.
     <br>
-    📖 Check out the GLM-5 <a href="https://z.ai/blog/glm-5" target="_blank">technical blog</a>.
+    📖 Check out the GLM-5 <a href="https://arxiv.org/abs/2602.15763" target="_blank">technical report</a>.
     <br>
     📍 Use GLM-5 API services on <a href="https://docs.z.ai/guides/llm/glm-5">Z.ai API Platform. </a>
     <br>
