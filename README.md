@@ -35,13 +35,12 @@ Reinforcement learning aims to bridge the gap between competence and excellence 
 
 GLM-5 is purpose-built for complex systems engineering and long-horizon agentic tasks. On our internal evaluation suite CC-Bench-V2, GLM-5 significantly outperforms GLM-4.7 across frontend, backend, and long-horizon tasks, narrowing the gap to Claude Opus 4.5.
 
+![realworld_bench](resources/realworld_bench.png)
+
 On [Vending Bench 2](https://andonlabs.com/evals/vending-bench-2), a benchmark that measures long-term operational capability, GLM-5 ranks \#1 among open-source models. Vending Bench 2 requires the model to run a simulated vending machine business over a one-year horizon; GLM-5 finishes with a final account balance of $4,432, approaching Claude Opus 4.5 and demonstrating strong long-term planning and resource management.
 
-<p align="center">
-<img src="resources/realworld_bench.png" height="350"/>
-&nbsp;&nbsp;
-<img src="resources/vending_bench.png" height="350"/>
-</p>
+![vending_bench](resources/vending_bench.png)
+
 ## Download Model
 
 | Model       | Download Links                                                                                                                      | Model Size | Precision |
@@ -82,7 +81,7 @@ vLLM, SGLang, xLLM and Ktransformers all support local deployment of GLM-5 serie
          --tensor-parallel-size 8 \
          --gpu-memory-utilization 0.85 \
          --speculative-config.method mtp \
-         --speculative-config.num_speculative_tokens 1 \
+         --speculative-config.num_speculative_tokens 3 \
          --tool-call-parser glm47 \
          --reasoning-parser glm45 \
          --enable-auto-tool-choice \
