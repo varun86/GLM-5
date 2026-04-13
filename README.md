@@ -85,9 +85,11 @@ vLLM, SGLang, xLLM and Ktransformers all support local deployment of GLM-5 serie
          --tool-call-parser glm47 \
          --reasoning-parser glm45 \
          --enable-auto-tool-choice \
+         --chat-template-content-format=string \
          --served-model-name glm-5.1-fp8
     ```
     Check the [recipes](https://github.com/vllm-project/recipes/blob/main/GLM/GLM5.md) for more details.
+>Note: When encounter Tool Call Parse issue with MTP enabled, please turn to vllm main branch to serve GLM-5.1.
 
 + SGLang
 
