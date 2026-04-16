@@ -693,8 +693,8 @@ done
 **node 1**
 
 ```
-MASTER_NODE_ADDR="11.87.49.110:19990"
-LOCAL_HOST="11.87.49.111"
+MASTER_NODE_ADDR="$master_ip:$master_port"
+LOCAL_HOST="$local_ip"
 START_PORT=15890
 START_DEVICE=0
 LOG_DIR="logs"
@@ -827,8 +827,8 @@ ENABLE_DECODE_RESPONSE_TO_SERVICE=true ../xllm-service/build/xllm_service/xllm_m
   # Model path (INT-quantized GLM-5 in this example)
   DRAFT_MODEL_PATH=/export/home/models/GLM-5-MTP/
 
-  MASTER_NODE_ADDR="11.87.49.110:10015"
-  LOCAL_HOST="11.87.49.110"
+  MASTER_NODE_ADDR="$master_ip:$master_port"
+  LOCAL_HOST="$local_host_ip"
   # Service Port
   START_PORT=18994
   START_DEVICE=0
@@ -883,8 +883,8 @@ MODEL_PATH=/export/home/models/GLM-5-w8a8/
 # Model path (INT-quantized GLM-5 in this example)
 DRAFT_MODEL_PATH=/export/home/models/GLM-5-MTP/
 
-MASTER_NODE_ADDR="11.87.49.110:10015"
-LOCAL_HOST="11.87.49.110"
+MASTER_NODE_ADDR="$master_ip:$master_port"
+LOCAL_HOST="$master_ip"
 # Service Port
 START_PORT=18994
 START_DEVICE=0
@@ -930,7 +930,7 @@ done
 
 # GLM5/Context Parallel Benchmark
 ##  Benchmark environment 
-* Hardware： Ascend 910C（A3） / 4 Pods
+* Hardware： Ascend 910C（A3） / 4 Nodes
 * Model：GLM5-W8A8 
 * Draft Model：GLM5-W8A8-MTP
 * PD Separation Configuration：
@@ -939,9 +939,8 @@ done
 * xllm version：release/v0.9.0（9be308aec60ea4a2dd799ee021ea42d608f4e67c - lastcommit）
 
 ## PD disagg server start script 
-### PD disagg start 4pods(910C) server  
-#### prefill instance 2 pods
-##### pod-0
+### prefill instance 2 nodes
+#### node-0
 ```
 #!/bin/bash
 set -e
@@ -973,16 +972,14 @@ export ATB_CONTEXT_WORKSPACE_SIZE=0
 
 
 MODEL_PATH="/export/home/models/GLM-5-final-w8a8/"
-#MODEL_PATH="/export/home/models/DeepSeek-V3.2-w8a8/"
-#DRAFT_MODEL_PATH="/export/home/models/DeepSeek-V3.2-w8a8-mtp"
 DRAFT_MODEL_PATH="/export/home/models/GLM-5-final-w8a8-MTP/"
-MASTER_NODE_ADDR="11.87.191.98:1895"
+MASTER_NODE_ADDR="$master_ip:$master_node" # 主节点ip， 主节点node
 START_PORT=48000
 START_DEVICE=0
 LOG_DIR="log"
 NNODES=32
 LOCAL_NODES=16
-LOCAL_HOST="11.87.191.98"
+LOCAL_HOST="$local_ip" # 本地ip
 
 mkdir -p $LOG_DIR
 
@@ -1016,12 +1013,12 @@ do
     --enable_schedule_overlap=false \
     --enable_disagg_pd=true \
     --instance_role=PREFILL \
-    --etcd_addr=11.87.191.83:3389 \
+    --etcd_addr=$etcd_ip:$etcd_port \ # etcd 地址 ip:port 
     --transfer_listen_port=$((26000+i)) \
     --disagg_pd_port=7777 \
-    --cp_size 16 \
-    --dp_size 1 \
-    --ep_size 1 \
+    --cp_size 16 \ # cp_size
+    --dp_size 1 \  # dp_size
+    --ep_size 1 \  # ep_size
     --node_rank=$i \
     --rank_tablefile=/export/home/shifengmin.3/workspace/ranktable_9899_new.json \
     > $LOG_FILE 2>&1 &
@@ -1031,7 +1028,7 @@ done
 tail -f log/node_0.log
 ```
 
-##### node-1
+#### node-1
 ```
 #!/bin/bash
 set -e
@@ -1061,16 +1058,14 @@ export ATB_LAYER_INTERNAL_TENSOR_REUSE=1
 export ATB_CONTEXT_WORKSPACE_SIZE=0
 
 MODEL_PATH="/export/home/models/GLM-5-final-w8a8/"
-#MODEL_PATH="/export/home/models/DeepSeek-V3.2-w8a8/"
-#DRAFT_MODEL_PATH="/export/home/models/DeepSeek-V3.2-w8a8-mtp"
 DRAFT_MODEL_PATH="/export/home/models/GLM-5-final-w8a8-MTP/"
-MASTER_NODE_ADDR="11.87.191.98:1895"
+MASTER_NODE_ADDR="$master_ip:$master_node" # 主节点ip， 主节点node
 START_PORT=48000
 START_DEVICE=0
 LOG_DIR="log"
 NNODES=32
 LOCAL_NODES=16
-LOCAL_HOST="11.87.191.99"
+LOCAL_HOST="$local_ip" # 本地ip
 
 mkdir -p $LOG_DIR
 
@@ -1104,12 +1099,12 @@ do
     --enable_schedule_overlap=false \
     --enable_disagg_pd=true \
     --instance_role=PREFILL \
-    --etcd_addr=11.87.191.83:3389 \
+    --etcd_addr=$etcd_addr \ # etcd_addr - eg：$ip:$port 
     --transfer_listen_port=$((26100+i)) \
     --disagg_pd_port=7777 \
-    --cp_size 16 \
-    --dp_size 1 \
-    --ep_size 1 \
+    --cp_size 16 \ # cp_size 
+    --dp_size 1 \  # dp_size
+    --ep_size 1 \  # ep_size
     --node_rank=$((i+LOCAL_NODES)) \
     --rank_tablefile=/export/home/shifengmin.3/workspace/ranktable_9899_new.json \
     > $LOG_FILE 2>&1 &
@@ -1118,8 +1113,8 @@ done
 
 tail -f log/node_0.log
 ```
-#### decode instance 2 pods
-##### node-0
+### decode instance 2 nodes
+#### node-0
 ```
 #!/bin/bash
 set -e
@@ -1151,16 +1146,14 @@ export ATB_CONTEXT_WORKSPACE_SIZE=0
 
 
 MODEL_PATH="/export/home/models/GLM-5-final-w8a8/"
-#MODEL_PATH="/export/home/models/DeepSeek-V3.2-w8a8/"
-#DRAFT_MODEL_PATH="/export/home/models/DeepSeek-V3.2-w8a8-mtp"
 DRAFT_MODEL_PATH="/export/home/models/GLM-5-final-w8a8-MTP/"
-MASTER_NODE_ADDR="11.87.191.83:1895"
+MASTER_NODE_ADDR="$master_ip:$master_port" # $master_ip:$master_port
 START_PORT=48000
 START_DEVICE=0
 LOG_DIR="log"
 NNODES=32
 LOCAL_NODES=16
-LOCAL_HOST="11.87.191.83"
+LOCAL_HOST="$local_ip" # $local_ip
 
 mkdir -p $LOG_DIR
 
@@ -1196,11 +1189,11 @@ do
     --enable_graph_mode_decode_no_padding=false \
     --enable_disagg_pd=true \
     --instance_role=DECODE \
-    --etcd_addr=11.87.191.83:3389 \
+    --etcd_addr=$etcd_ip:$etcd_port \ # etcd_addr - eg：$ip:$port 
     --transfer_listen_port=$((26000+i)) \
     --disagg_pd_port=7777 \
-    --dp_size 2 \
-    --ep_size 32 \
+    --dp_size 2 \ # dp_size = 2, tp_size = 16
+    --ep_size 32 \ # ep_size = 32
     --node_rank=$i \
     --rank_tablefile=/export/home/shifengmin.3/workspace/ranktable_8382_new.json \
     > $LOG_FILE 2>&1 &
@@ -1209,7 +1202,7 @@ done
 
 tail -f log/node_0.log
 ```
-##### node-1
+#### node-1
 ```
 #!/bin/bash
 set -e
@@ -1241,16 +1234,14 @@ export ATB_CONTEXT_WORKSPACE_SIZE=0
 
 
 MODEL_PATH="/export/home/models/GLM-5-final-w8a8/"
-#MODEL_PATH="/export/home/models/DeepSeek-V3.2-w8a8/"
-#DRAFT_MODEL_PATH="/export/home/models/DeepSeek-V3.2-w8a8-mtp"
 DRAFT_MODEL_PATH="/export/home/models/GLM-5-final-w8a8-MTP/"
-MASTER_NODE_ADDR="11.87.191.83:1895"
+MASTER_NODE_ADDR="$master_ip:$master_port" # master_addr $master_ip: $master_port
 START_PORT=48000
 START_DEVICE=0
 LOG_DIR="log"
 NNODES=32
 LOCAL_NODES=16
-LOCAL_HOST="11.87.191.82"
+LOCAL_HOST="$local_ip" # local_ip
 
 mkdir -p $LOG_DIR
 
@@ -1286,11 +1277,11 @@ do
     --enable_graph_mode_decode_no_padding=false \
     --enable_disagg_pd=true \
     --instance_role=DECODE \
-    --etcd_addr=11.87.191.83:3389 \
+    --etcd_addr=$etcd_addr \ # etcd_addr $etcd_ip:$etcd_port
     --transfer_listen_port=$((26100+i)) \
     --disagg_pd_port=7777 \
-    --dp_size 2 \
-    --ep_size 32 \
+    --dp_size 2 \ # dp_size
+    --ep_size 32 \ # ep_size
     --node_rank=$((i+LOCAL_NODES)) \
     --rank_tablefile=/export/home/shifengmin.3/workspace/ranktable_8382_new.json \
     > $LOG_FILE 2>&1 &
