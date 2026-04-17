@@ -929,16 +929,16 @@ done
 ```
 
 # GLM5/Context Parallel Benchmark
-##  Benchmark environment 
+##  Benchmark environment
 * Hardware： Ascend A3 / 4 Nodes
-* Model：GLM5-W8A8 
+* Model：GLM5-W8A8
 * Draft Model：GLM5-W8A8-MTP
 * PD Separation Configuration：
   * P instance：cp_size = 16，dp_size = 1, ep_size = 1
   * D instance：dp_size = 2， ep_size = 32
 * xllm version：release/v0.9.0（9be308aec60ea4a2dd799ee021ea42d608f4e67c - lastcommit）
 
-## PD disagg server start script 
+## PD disagg server start script
 ### prefill instance 2 nodes
 #### node-0
 ```
@@ -1013,7 +1013,7 @@ do
     --enable_schedule_overlap=false \
     --enable_disagg_pd=true \
     --instance_role=PREFILL \
-    --etcd_addr=$etcd_ip:$etcd_port \ # etcd 地址 ip:port 
+    --etcd_addr=$etcd_ip:$etcd_port \ # etcd 地址 ip:port
     --transfer_listen_port=$((26000+i)) \
     --disagg_pd_port=7777 \
     --cp_size 16 \ # cp_size
@@ -1099,10 +1099,10 @@ do
     --enable_schedule_overlap=false \
     --enable_disagg_pd=true \
     --instance_role=PREFILL \
-    --etcd_addr=$etcd_addr \ # etcd_addr - eg：$ip:$port 
+    --etcd_addr=$etcd_addr \ # etcd_addr - eg：$ip:$port
     --transfer_listen_port=$((26100+i)) \
     --disagg_pd_port=7777 \
-    --cp_size 16 \ # cp_size 
+    --cp_size 16 \ # cp_size
     --dp_size 1 \  # dp_size
     --ep_size 1 \  # ep_size
     --node_rank=$((i+LOCAL_NODES)) \
@@ -1189,7 +1189,7 @@ do
     --enable_graph_mode_decode_no_padding=false \
     --enable_disagg_pd=true \
     --instance_role=DECODE \
-    --etcd_addr=$etcd_ip:$etcd_port \ # etcd_addr - eg：$ip:$port 
+    --etcd_addr=$etcd_ip:$etcd_port \ # etcd_addr - eg：$ip:$port
     --transfer_listen_port=$((26000+i)) \
     --disagg_pd_port=7777 \
     --dp_size 2 \ # dp_size = 2, tp_size = 16
@@ -1363,7 +1363,7 @@ models = [
 ]
 ```
 
-### aisbench command 
+### aisbench command
 ```
 ais_bench --models vllm_api_stream_chat --datasets synthetic_gen -m perf
 ```
